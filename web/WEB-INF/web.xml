@@ -31,4 +31,14 @@
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ViewUsersServlet</servlet-name>
+        <servlet-class>ViewUsersServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ViewUsersServlet</servlet-name>
+        <url-pattern>/view</url-pattern>
+    </servlet-mapping>
+
 </web-app>
