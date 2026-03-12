@@ -1,4 +1,6 @@
 import java.io.*;
+import java.sql.*;
+
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 
@@ -9,7 +11,6 @@ public class RegisterServlet extends HttpServlet {
             throws ServletException, IOException {
 
         response.setContentType("text/html");
-
         PrintWriter out = response.getWriter();
 
         String name = request.getParameter("name");
@@ -18,10 +19,36 @@ public class RegisterServlet extends HttpServlet {
         String gender = request.getParameter("gender");
         String country = request.getParameter("country");
 
-        out.println("<h2>User Registration Successful</h2>");
-        out.println("<p>Name: " + name + "</p>");
-        out.println("<p>Email: " + email + "</p>");
-        out.println("<p>Gender: " + gender + "</p>");
-        out.println("<p>Country: " + country + "</p>");
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(
+                    "jdbc:mysql://localhost:3306/userdb",
+                    "root",
+                    "Root@123"
+            );
+
+            PreparedStatement ps = con.prepareStatement(
+                    "insert into users(name,email,password,gender,country) values(?,?,?,?,?)"
+            );
+
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setString(3, password);
+            ps.setString(4, gender);
+            ps.setString(5, country);
+
+            int i = ps.executeUpdate();
+
+            if (i > 0) {
+                out.println("<h2>Registered Successfully</h2>");
+            }
+
+            con.close();
+
+        } catch (Exception e) {
+            out.println(e);
+        }
     }
 }
